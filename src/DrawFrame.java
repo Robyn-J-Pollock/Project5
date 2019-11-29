@@ -16,14 +16,20 @@ public class DrawFrame extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
+	protected ControlPanel controlPanel;
 
 	public DrawFrame() {
 		//sets title
 		super("Hamming Distance");
 		
+		//Create Components
+		controlPanel = new ControlPanel();
+		
 		//sets the layout manager
 		this.setLayout(new BorderLayout());
 		//TODO: Add components
+		this.add(controlPanel, BorderLayout.WEST);
 		
 		//setup frame
 		this.setSize(800, 600);
