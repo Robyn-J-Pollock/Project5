@@ -1,6 +1,7 @@
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTextArea;
@@ -36,12 +37,20 @@ public class ControlPanel extends JPanel {
 	public ControlPanel() {		
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
-		hamDistSlider = new JSlider();
-		showStationButton = new JButton();
-		calcHDButton = new JButton();
-		addStationButton = new JButton();
+		hamDistSlider = new JSlider(1, 4);
+		hamDistSlider.setMajorTickSpacing(1);
+		hamDistSlider.setPaintTicks(true);
+		hamDistSlider.setPaintLabels(true);
+		
+		showStationButton = new JButton("Show Station");
+		calcHDButton = new JButton("Calculate HD");
+		addStationButton = new JButton("Add Station");
+		
 		showStationArea = new JTextArea();
+				
 		compareWithBox = new JComboBox<String>();
+		compareWithBox.add(new JLabel("Compare with: "));
+		
 		textDistArray = new JTextField[7];
 		for (int x = 0; x < 7; x++)
 			textDistArray[x] = new JTextField();

@@ -1,6 +1,10 @@
 import java.awt.BorderLayout;
 
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.JTextArea;
 
 /*
  * @author Robyn Pollock
@@ -18,6 +22,8 @@ public class DrawFrame extends JFrame {
 	private static final long serialVersionUID = 1L;
 	
 	protected ControlPanel controlPanel;
+	//TODO: change to custom panel;
+	protected JPanel blankPanel;
 
 	public DrawFrame() {
 		//sets title
@@ -25,11 +31,17 @@ public class DrawFrame extends JFrame {
 		
 		//Create Components
 		controlPanel = new ControlPanel();
+		//TODO: change to custom panel;
+		blankPanel = new JPanel();
 		
 		//sets the layout manager
-		this.setLayout(new BorderLayout());
+		this.setLayout(new BoxLayout(this.getContentPane(), BoxLayout.X_AXIS));
 		//TODO: Add components
-		this.add(controlPanel, BorderLayout.WEST);
+		this.add(controlPanel);
+		//TODO: change to custom panel;
+		JSlider blankArea = new JSlider();
+		blankPanel.add(blankArea);
+		this.add(blankPanel);
 		
 		//setup frame
 		this.setSize(800, 600);
