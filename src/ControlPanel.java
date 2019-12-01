@@ -1,3 +1,10 @@
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.TreeSet;
+
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -6,6 +13,8 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 /*
  * @author Robyn Pollock
  * @version 11/28/2019
@@ -29,18 +38,122 @@ public class ControlPanel extends JPanel {
 	
 	protected JComboBox<String> compareWithBox;
 	
-	protected JTextField[] textDistArray;
+	protected JTextField hamDistField;
 	
-	protected JPanel bottomPanel;
+	protected JTextField[] textDistFields;
 	
+	protected JLabel hamDistLabel, compareWithLabel;
 	
-	public ControlPanel() {		
-		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+	protected JLabel[] textDistLabels;
+	
+	/*
+	 * Creates and controls required panel
+	 */
+	public ControlPanel() {	
 		
+		this.setLayout(new GridBagLayout());
+		GridBagConstraints gbConstraints = new GridBagConstraints();
+		
+		//Method to create components
+		createComponents();
+		gbConstraints.fill = GridBagConstraints.BOTH;
+		gbConstraints.weightx = 1;
+		gbConstraints.insets = new Insets(10, 10, 10, 10);
+		
+		gbConstraints.gridx = 0;
+		gbConstraints.gridy = 0;
+		this.add(hamDistLabel, gbConstraints);
+		
+		
+		gbConstraints.gridx = 1;
+		this.add(hamDistField, gbConstraints);
+		
+		gbConstraints.gridx = 0;
+		gbConstraints.gridy = 1;
+		gbConstraints.gridwidth = 2;
+		this.add(hamDistSlider, gbConstraints);
+		
+		gbConstraints.gridy = 2;
+		this.add(showStationButton, gbConstraints);
+		
+		gbConstraints.gridy = 3;
+		gbConstraints.weighty = 1;
+		this.add(showStationArea, gbConstraints);
+		
+		gbConstraints.gridwidth = 1;
+		gbConstraints.gridy = 4;
+		gbConstraints.weighty = 0;
+		this.add(compareWithLabel, gbConstraints);
+		
+		gbConstraints.gridx = 1;
+		this.add(compareWithBox, gbConstraints);
+		
+		gbConstraints.gridx = 0;
+		gbConstraints.gridy = 5;
+		gbConstraints.gridwidth = 2;
+		this.add(calcHDButton, gbConstraints);
+		
+		gbConstraints.gridwidth = 1;
+		for (int y = 6; y < 11; y++)
+		{
+			gbConstraints.gridy = y;
+			for (int x = 0; x < 2; x++)
+			{
+				gbConstraints.gridx = x;
+				if (x == 0)
+					this.add(textDistLabels[y - 6], gbConstraints);
+				else if (x == 1)
+					this.add(textDistFields[y - 6], gbConstraints);
+			}
+		}
+		
+		gbConstraints.anchor = GridBagConstraints.PAGE_END;
+		gbConstraints.gridx = 0;
+		gbConstraints.gridy = 11;
+		this.add(addStationButton, gbConstraints);
+		
+		gbConstraints.gridx = 1;
+		this.add(textDistFields[5], gbConstraints);
+		
+		//Adjusts text field on slider change
+		hamDistSlider.addChangeListener(new ChangeListener() 
+				{
+
+					@Override
+					public void stateChanged(ChangeEvent arg0) {
+						// TODO Auto-generated method stub
+						hamDistField.setText("" + hamDistSlider.getValue());
+					}
+				});
+		
+		//Runs showStations method on button push
+		showStationButton.addActionListener(new ActionListener() 
+				{
+
+					@Override
+					public void actionPerformed(ActionEvent arg0) {
+						// TODO Auto-generated method stub
+						showStations(Integer.parseInt(hamDistField.getText()));
+					}
+				});
+	}
+	
+	/*
+	 * Method used to create components
+	 * Seperated to make editing and readability easier
+	 */
+	private void createComponents() {
 		hamDistSlider = new JSlider(1, 4);
 		hamDistSlider.setMajorTickSpacing(1);
 		hamDistSlider.setPaintTicks(true);
 		hamDistSlider.setPaintLabels(true);
+		
+		hamDistLabel = new JLabel("Enter Hamming Dist: ");
+		hamDistLabel.setHorizontalAlignment(JLabel.RIGHT);
+		
+		hamDistField = new JTextField();
+		hamDistField.setEditable(false);
+		hamDistField.setText("" + hamDistSlider.getValue());
 		
 		showStationButton = new JButton("Show Station");
 		calcHDButton = new JButton("Calculate HD");
@@ -49,25 +162,41 @@ public class ControlPanel extends JPanel {
 		showStationArea = new JTextArea();
 				
 		compareWithBox = new JComboBox<String>();
-		compareWithBox.add(new JLabel("Compare with: "));
+		//Generates base compare with drop down list
+		generateCompareWith();
+		compareWithLabel = new JLabel("Compare with: ");
+		compareWithLabel.setHorizontalAlignment(JLabel.RIGHT);
 		
-		textDistArray = new JTextField[7];
-		for (int x = 0; x < 7; x++)
-			textDistArray[x] = new JTextField();
-		bottomPanel = new JPanel();
+		textDistFields = new JTextField[6];
+		for (int x = 0; x < 6; x++)
+			textDistFields[x] = new JTextField();
 		
-		this.add(textDistArray[0]);
-		this.add(hamDistSlider);
-		this.add(showStationButton);
-		this.add(showStationArea);
-		this.add(compareWithBox);
-		this.add(calcHDButton);
-		for (int x = 1; x < 6; x++)
-			this.add(textDistArray[x]);
+		textDistLabels = new JLabel[5];
+		for (int x = 0; x < 5; x++) {
+			textDistLabels[x] = new JLabel("Distance " + x);
+			textDistLabels[x].setHorizontalAlignment(JLabel.RIGHT);
+		}
+	}
+	
+	/*
+	 * Reads Mesonet.txt and adds the list to the drop down box
+	 */
+	private void generateCompareWith() {
+		//TODO: Implement Function
+		TreeSet<String> compareList = new TreeSet<String>();
+		compareList.add("WHO");
+		compareList.add("APPLE");
+		compareList.add("EHHO");
 		
-		bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.X_AXIS));
-		bottomPanel.add(addStationButton);
-		bottomPanel.add(textDistArray[6]);
-		this.add(bottomPanel);
+		for (String thing : compareList)
+			compareWithBox.addItem(thing);
+	}
+	
+	/*
+	 * Shows station with the same hamming distance
+	 */
+	private void showStations(int hamDist) {
+		//TODO: Implement function
+		System.out.println(hamDist);
 	}
 }

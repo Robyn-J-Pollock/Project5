@@ -1,4 +1,7 @@
 import java.awt.BorderLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
@@ -25,6 +28,9 @@ public class DrawFrame extends JFrame {
 	//TODO: change to custom panel;
 	protected JPanel blankPanel;
 
+	/*
+	 * Creates frame and panel.
+	 */
 	public DrawFrame() {
 		//sets title
 		super("Hamming Distance");
@@ -35,7 +41,7 @@ public class DrawFrame extends JFrame {
 		blankPanel = new JPanel();
 		
 		//sets the layout manager
-		this.setLayout(new BoxLayout(this.getContentPane(), BoxLayout.X_AXIS));
+		this.setLayout(new GridLayout(1, 2));
 		//TODO: Add components
 		this.add(controlPanel);
 		//TODO: change to custom panel;
@@ -44,13 +50,16 @@ public class DrawFrame extends JFrame {
 		this.add(blankPanel);
 		
 		//setup frame
-		this.setSize(800, 600);
+		this.setSize(800, 800);
 		this.setResizable(false);
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setVisible(true);
 	}
 	
+	/*
+	 * Main method
+	 */
 	public static void main(String[] args) {
 		DrawFrame frame = new DrawFrame();
 		frame.isActive();
