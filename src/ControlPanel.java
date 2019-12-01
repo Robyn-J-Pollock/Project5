@@ -257,11 +257,15 @@ public class ControlPanel extends JPanel {
 	
 	private void addStation(String station) {
 		//TODO: create safeguards
-		if (compareList.add(station))
+		station = station.trim();
+		if (station.length() == 4)
 		{
-			compareWithBox.removeAllItems();
-			for (String thing : compareList)
-				compareWithBox.addItem(thing);
+			if (compareList.add(station))
+			{
+				compareWithBox.removeAllItems();
+				for (String thing : compareList)
+					compareWithBox.addItem(thing);
+			}
 		}
 	}
 }
