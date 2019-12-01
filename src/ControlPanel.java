@@ -38,13 +38,15 @@ public class ControlPanel extends JPanel {
 	
 	protected JComboBox<String> compareWithBox;
 	
-	protected JTextField hamDistField;
+	protected JTextField hamDistField, addStationField;
 	
 	protected JTextField[] textDistFields;
 	
 	protected JLabel hamDistLabel, compareWithLabel;
 	
 	protected JLabel[] textDistLabels;
+	
+	private TreeSet<String> compareList;
 	
 	/*
 	 * Creates and controls required panel
@@ -113,7 +115,7 @@ public class ControlPanel extends JPanel {
 		this.add(addStationButton, gbConstraints);
 		
 		gbConstraints.gridx = 1;
-		this.add(textDistFields[5], gbConstraints);
+		this.add(addStationField, gbConstraints);
 		
 		//Adjusts text field on slider change
 		hamDistSlider.addChangeListener(new ChangeListener() 
@@ -135,6 +137,29 @@ public class ControlPanel extends JPanel {
 						// TODO Auto-generated method stub
 						showStations(Integer.parseInt(hamDistField.getText()));
 					}
+				});
+		
+		//Runs calcHamDist function on button press;
+		calcHDButton.addActionListener(new ActionListener()
+				{
+
+					@Override
+					public void actionPerformed(ActionEvent arg0) {
+						// TODO Auto-generated method stub
+						calcHamDist((String)compareWithBox.getSelectedItem());
+					}
+					
+				});
+		
+		addStationButton.addActionListener(new ActionListener()
+				{
+
+					@Override
+					public void actionPerformed(ActionEvent arg0) {
+						// TODO Auto-generated method stub
+						addStation(addStationField.getText().toUpperCase());
+					}
+			
 				});
 	}
 	
@@ -160,6 +185,7 @@ public class ControlPanel extends JPanel {
 		addStationButton = new JButton("Add Station");
 		
 		showStationArea = new JTextArea();
+		showStationArea.setEditable(false);
 				
 		compareWithBox = new JComboBox<String>();
 		//Generates base compare with drop down list
@@ -167,15 +193,19 @@ public class ControlPanel extends JPanel {
 		compareWithLabel = new JLabel("Compare with: ");
 		compareWithLabel.setHorizontalAlignment(JLabel.RIGHT);
 		
-		textDistFields = new JTextField[6];
-		for (int x = 0; x < 6; x++)
+		textDistFields = new JTextField[5];
+		for (int x = 0; x < 5; x++) {
 			textDistFields[x] = new JTextField();
+			textDistFields[x].setEditable(false);
+		}
 		
 		textDistLabels = new JLabel[5];
 		for (int x = 0; x < 5; x++) {
 			textDistLabels[x] = new JLabel("Distance " + x);
 			textDistLabels[x].setHorizontalAlignment(JLabel.RIGHT);
 		}
+		
+		addStationField = new JTextField();
 	}
 	
 	/*
@@ -183,7 +213,7 @@ public class ControlPanel extends JPanel {
 	 */
 	private void generateCompareWith() {
 		//TODO: Implement Function
-		TreeSet<String> compareList = new TreeSet<String>();
+		compareList = new TreeSet<String>();
 		compareList.add("WHO");
 		compareList.add("APPLE");
 		compareList.add("EHHO");
@@ -193,10 +223,33 @@ public class ControlPanel extends JPanel {
 	}
 	
 	/*
-	 * Shows station with the same hamming distance
+	 * Shows station with the same hamming distance,
 	 */
 	private void showStations(int hamDist) {
 		//TODO: Implement function
-		System.out.println(hamDist);
+		showStationArea.setText(showStationArea.getText() + 1);
+	}
+	
+	/*
+	 * Changes Distance 0 - 4 for the number of stations that distance away
+	 */
+	
+	private void calcHamDist(String station) {
+		//TODO: Implement function
+		textDistFields[0].setText(textDistFields[0].getText() + 0);
+		textDistFields[1].setText(textDistFields[1].getText() + 1);
+		textDistFields[2].setText(textDistFields[2].getText() + 2);
+		textDistFields[3].setText(textDistFields[3].getText() + 3);
+		textDistFields[4].setText(textDistFields[4].getText() + 4);
+	}
+	
+	private void addStation(String station) {
+		//TODO: create safeguards
+		if (compareList.add(station))
+		{
+			compareWithBox.removeAllItems();
+			for (String thing : compareList)
+				compareWithBox.addItem(thing);
+		}
 	}
 }
