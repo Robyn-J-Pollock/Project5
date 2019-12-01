@@ -238,8 +238,27 @@ public class ControlPanel extends JPanel {
 	 * Shows station with the same hamming distance,
 	 */
 	private void showStations(int hamDist) {
-		//TODO: Implement function
-		showStationArea.setText(showStationArea.getText() + 1);
+		showStationArea.setText("");
+		for (String thing : compareList)
+		{
+			if (hamDistComparer((String)compareWithBox.getSelectedItem(), thing) == hamDist)
+			{
+				showStationArea.setText(showStationArea.getText() + thing + "\n");
+			}
+		}
+	}
+	
+	private int hamDistComparer(String firstStation, String secondStation) {
+		char[] firstChar = firstStation.toCharArray();
+		char[] secondChar = secondStation.toCharArray();
+		
+		int dist = 0;
+		for (int x = 0; x < 4; x++) 
+		{
+			if (firstChar[x] != secondChar[x])
+				dist++;
+		}
+		return dist;
 	}
 	
 	/*
