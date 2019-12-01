@@ -1,18 +1,11 @@
-import java.awt.BorderLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.io.IOException;
 
-import javax.swing.BoxLayout;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JSlider;
-import javax.swing.JTextArea;
 
 /*
  * @author Robyn Pollock
- * @version 11/28/2019
+ * @version 12/1/2019
  * 
  * Project 5: For CS-2334
  * Creates a gui that allows the user to select a hamming distance.
@@ -27,7 +20,7 @@ public class DrawFrame extends JFrame {
 	
 	protected ControlPanel controlPanel;
 	//TODO: change to custom panel;
-	protected JPanel blankPanel;
+	protected CustomPanel customPanel;
 
 	/*
 	 * Creates frame and panel.
@@ -39,16 +32,13 @@ public class DrawFrame extends JFrame {
 		//Create Components
 		controlPanel = new ControlPanel();
 		//TODO: change to custom panel;
-		blankPanel = new JPanel();
+		customPanel = new CustomPanel();
 		
 		//sets the layout manager
 		this.setLayout(new GridLayout(1, 2));
 		//TODO: Add components
 		this.add(controlPanel);
-		//TODO: change to custom panel;
-		JSlider blankArea = new JSlider();
-		blankPanel.add(blankArea);
-		this.add(blankPanel);
+		this.add(customPanel);
 		
 		//setup frame
 		this.setSize(800, 800);
