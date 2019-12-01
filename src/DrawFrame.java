@@ -32,7 +32,7 @@ public class DrawFrame extends JFrame {
 		//Create Components
 		controlPanel = new ControlPanel();
 		//TODO: change to custom panel;
-		customPanel = new CustomPanel();
+		customPanel = new CustomPanel(controlPanel);
 		
 		//sets the layout manager
 		this.setLayout(new GridLayout(1, 2));

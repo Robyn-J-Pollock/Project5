@@ -17,6 +17,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.text.Document;
 /*
  * @author Robyn Pollock
  * @version 12/1/2019
@@ -163,6 +164,10 @@ public class ControlPanel extends JPanel {
 					}
 			
 				});
+	}
+	
+	public Document getTextAreaDoc() {
+		return showStationArea.getDocument();
 	}
 	
 	/*

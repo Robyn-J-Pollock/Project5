@@ -1,9 +1,13 @@
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JRadioButtonMenuItem;
-import javax.swing.JSlider;
+import javax.swing.JTextArea;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
 
 
 /*
@@ -23,8 +27,47 @@ public class CustomPanel extends JPanel{
 	protected JRadioButton fourAveButton, oneAveButton;
 	
 	protected JCheckBox shownStaAveBox;
+	
+	private Document textArea;
 
-	public CustomPanel() {
+	public CustomPanel(ControlPanel controlPanel) {
+		createComponents();
+		
+		this.add(fourAveButton);
+		this.add(oneAveButton);
+		
+		this.add(shownStaAveBox);
+		
+		textArea = controlPanel.getTextAreaDoc();
+		textArea.addDocumentListener(new DocumentListener() {
+			
+			boolean selected = false;
+
+			@Override
+			public void changedUpdate(DocumentEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void insertUpdate(DocumentEvent arg0) {
+				shownStaAveBox.setSelected(selected);
+				shownStaAveBox.setEnabled(true);
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent arg0) {
+				// TODO Auto-generated method stub
+				selected = shownStaAveBox.isSelected();
+				shownStaAveBox.setSelected(false);
+				shownStaAveBox.setEnabled(false);
+			}
+			
+		});
+		
+	}
+	
+	private void createComponents() {
 		radioGroup = new ButtonGroup();
 		fourAveButton = new JRadioButton();
 		fourAveButton.setText("4-Letter Average");
@@ -38,10 +81,5 @@ public class CustomPanel extends JPanel{
 		shownStaAveBox = new JCheckBox();
 		shownStaAveBox.setText("Use Shown Stations Only");
 		shownStaAveBox.setEnabled(false);
-		
-		this.add(fourAveButton);
-		this.add(oneAveButton);
-		
-		this.add(shownStaAveBox);
 	}
 }
