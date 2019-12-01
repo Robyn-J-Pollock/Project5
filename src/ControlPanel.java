@@ -216,7 +216,6 @@ public class ControlPanel extends JPanel {
 	 * Reads Mesonet.txt and adds the list to the drop down box
 	 */
 	private void generateCompareWith() throws IOException {
-		//TODO: Implement Function
 		compareList = new TreeSet<String>();
 		
 		BufferedReader br = new BufferedReader(new FileReader("Mesonet.txt"));
@@ -248,6 +247,9 @@ public class ControlPanel extends JPanel {
 		}
 	}
 	
+	/*
+	 * Compares the hamming distance between two stations
+	 */
 	private int hamDistComparer(String firstStation, String secondStation) {
 		char[] firstChar = firstStation.toCharArray();
 		char[] secondChar = secondStation.toCharArray();
@@ -266,16 +268,40 @@ public class ControlPanel extends JPanel {
 	 */
 	
 	private void calcHamDist(String station) {
-		//TODO: Implement function
-		textDistFields[0].setText(textDistFields[0].getText() + 0);
-		textDistFields[1].setText(textDistFields[1].getText() + 1);
-		textDistFields[2].setText(textDistFields[2].getText() + 2);
-		textDistFields[3].setText(textDistFields[3].getText() + 3);
-		textDistFields[4].setText(textDistFields[4].getText() + 4);
+		int[] distances = new int[5];
+		
+		for (String compStation : compareList) 
+		{
+			int hamDist = hamDistComparer(station, compStation);
+			switch (hamDist) {
+			case 0:
+				distances[0]++;
+				break;
+			case 1:
+				distances[1]++;
+				break;
+			case 2:
+				distances[2]++;
+				break;
+			case 3:
+				distances[3]++;
+				break;
+			case 4:
+				distances[4]++;
+				break;
+			default:
+				break;
+			}
+		}
+		
+		for (int x = 0; x < 5; x++)
+			textDistFields[x].setText(String.valueOf(distances[x]));
 	}
 	
+	/*
+	 * Adds input station to compareList dropdown
+	 */
 	private void addStation(String station) {
-		//TODO: create safeguards
 		station = station.trim();
 		if (station.length() == 4)
 		{
