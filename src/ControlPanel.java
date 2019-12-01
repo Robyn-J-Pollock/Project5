@@ -3,6 +3,10 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.TreeSet;
 
 import javax.swing.BoxLayout;
@@ -51,7 +55,7 @@ public class ControlPanel extends JPanel {
 	/*
 	 * Creates and controls required panel
 	 */
-	public ControlPanel() {	
+	public ControlPanel() throws IOException {	
 		
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints gbConstraints = new GridBagConstraints();
@@ -167,7 +171,7 @@ public class ControlPanel extends JPanel {
 	 * Method used to create components
 	 * Seperated to make editing and readability easier
 	 */
-	private void createComponents() {
+	private void createComponents() throws IOException {
 		hamDistSlider = new JSlider(1, 4);
 		hamDistSlider.setMajorTickSpacing(1);
 		hamDistSlider.setPaintTicks(true);
@@ -211,12 +215,20 @@ public class ControlPanel extends JPanel {
 	/*
 	 * Reads Mesonet.txt and adds the list to the drop down box
 	 */
-	private void generateCompareWith() {
+	private void generateCompareWith() throws IOException {
 		//TODO: Implement Function
 		compareList = new TreeSet<String>();
-		compareList.add("WHO");
-		compareList.add("APPLE");
-		compareList.add("EHHO");
+		
+		BufferedReader br = new BufferedReader(new FileReader("Mesonet.txt"));
+		
+		String line = br.readLine();
+		while (line != null) {
+			line = line.trim().toUpperCase();
+			if (line.length() == 4)
+				compareList.add(line);
+			line = br.readLine();
+		}
+		
 		
 		for (String thing : compareList)
 			compareWithBox.addItem(thing);

@@ -2,6 +2,7 @@ import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.io.IOException;
 
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
@@ -31,7 +32,7 @@ public class DrawFrame extends JFrame {
 	/*
 	 * Creates frame and panel.
 	 */
-	public DrawFrame() {
+	public DrawFrame() throws IOException {
 		//sets title
 		super("Hamming Distance");
 		
@@ -60,7 +61,7 @@ public class DrawFrame extends JFrame {
 	/*
 	 * Main method
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		DrawFrame frame = new DrawFrame();
 		frame.isActive();
 	}
