@@ -170,6 +170,10 @@ public class ControlPanel extends JPanel {
 		return showStationArea.getDocument();
 	}
 	
+	public TreeSet<String> getFullList() {
+		return compareList;
+	}
+	
 	/*
 	 * Method used to create components
 	 * Seperated to make editing and readability easier

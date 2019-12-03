@@ -1,9 +1,17 @@
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.TreeSet;
+
 import javax.swing.ButtonGroup;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
@@ -28,16 +36,31 @@ public class CustomPanel extends JPanel{
 	
 	protected JCheckBox shownStaAveBox;
 	
+	protected JTextField asciiAveField;
+	
+	protected JButton calcAveButton;
+	
 	private Document textArea;
+	
+	private ControlPanel controlPanel;
 
 	public CustomPanel(ControlPanel controlPanel) {
+		this.controlPanel = controlPanel;
 		createComponents();
 		
-		this.add(fourAveButton);
-		this.add(oneAveButton);
+		this.setLayout(new GridBagLayout());
+		GridBagConstraints gbCon = new GridBagConstraints();
 		
-		this.add(shownStaAveBox);
+		gbCon.fill = GridBagConstraints.BOTH;
+		gbCon.gridx = 0;
+		gbCon.gridy = 0;
+		this.add(fourAveButton, gbCon);
+		gbCon.gridx = 1;
+		this.add(oneAveButton,gbCon);
 		
+		gbCon.gridx = 0;
+		gbCon.gridy = 1;
+		this.add(shownStaAveBox,gbCon);		
 		textArea = controlPanel.getTextAreaDoc();
 		textArea.addDocumentListener(new DocumentListener() {
 			
@@ -65,6 +88,25 @@ public class CustomPanel extends JPanel{
 			
 		});
 		
+		gbCon.gridx = 0;
+		gbCon.gridy = 2;
+		this.add(asciiAveField, gbCon);
+		gbCon.gridx = 1;
+		this.add(calcAveButton, gbCon);
+		calcAveButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				try {
+					calcAveValue(shownStaAveBox.isSelected());
+				} catch (BadLocationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+		});
 	}
 	
 	private void createComponents() {
@@ -81,5 +123,53 @@ public class CustomPanel extends JPanel{
 		shownStaAveBox = new JCheckBox();
 		shownStaAveBox.setText("Use Shown Stations Only");
 		shownStaAveBox.setEnabled(false);
+		
+		asciiAveField = new JTextField();
+		asciiAveField.setEditable(false);
+		
+		calcAveButton = new JButton();
+		calcAveButton.setText("Calculate Average");
+	}
+	
+	private void calcAveValue(boolean useTextArea) throws BadLocationException {
+		TreeSet<String> staList = new TreeSet<String>();
+		int[] placeValue = new int[] { 0, 0, 0, 0 };
+		
+		if (useTextArea) {
+			String[] tempArray = textArea.getText(0, textArea.getLength() - 1).split("\n");
+			for (String string : tempArray) {
+				System.out.print(string);
+				staList.add(string);
+			}
+		}
+		else {
+			staList = controlPanel.getFullList();
+		}
+		
+		for (String item : staList) {
+			char[] itemArray = item.toCharArray();
+			for (int x = 0; x < 4; x++) {
+				placeValue[x] += (int)itemArray[x];
+			}
+		}
+		
+		for (int x = 0; x < 4; x++) {
+			placeValue[x] = placeValue[x]/staList.size();
+		}
+		
+		if (fourAveButton.isSelected()) {
+			String tempString = "";
+			for (int x = 0; x < 4; x++)
+				tempString += (char)placeValue[x];
+			asciiAveField.setText(tempString);
+		}
+		
+		else {
+			int fullAve = 0;
+			for (int x = 0; x < 4; x++) 
+				fullAve += placeValue[x];
+			fullAve = fullAve/4;
+			asciiAveField.setText(String.valueOf((char)fullAve));
+		}
 	}
 }
