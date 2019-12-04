@@ -1,46 +1,36 @@
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.TreeSet;
 
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
-
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.GridPane;
 
 /*
  * Custom panel for Project 5
  * @author Robyn Pollock
  * @version 12/1/2019
  */
-public class CustomPanel extends JPanel{
+public class CustomPanel extends GridPane {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	
-	protected ButtonGroup radioGroup;
+	protected ToggleGroup radioGroup;
 	
-	protected JRadioButton fourAveButton, oneAveButton;
+	protected RadioButton fourAveButton, oneAveButton;
 	
-	protected JCheckBox shownStaAveBox;
+	protected CheckBox shownStaAveBox;
 	
-	protected JTextField asciiAveField;
+	protected TextField asciiAveField;
 	
-	protected JButton calcAveButton;
+	protected Button calcAveButton;
 	
-	private Document textArea;
+	private TextArea textArea;
 	
 	private ControlPanel controlPanel;
 
@@ -48,99 +38,72 @@ public class CustomPanel extends JPanel{
 		this.controlPanel = controlPanel;
 		createComponents();
 		
-		this.setLayout(new GridBagLayout());
-		GridBagConstraints gbCon = new GridBagConstraints();
+		this.add(fourAveButton, 0, 0);
+		this.add(oneAveButton, 1, 0);
 		
-		gbCon.fill = GridBagConstraints.BOTH;
-		gbCon.gridx = 0;
-		gbCon.gridy = 0;
-		this.add(fourAveButton, gbCon);
-		gbCon.gridx = 1;
-		this.add(oneAveButton,gbCon);
-		
-		gbCon.gridx = 0;
-		gbCon.gridy = 1;
-		this.add(shownStaAveBox,gbCon);		
-		textArea = controlPanel.getTextAreaDoc();
-		textArea.addDocumentListener(new DocumentListener() {
-			
-			boolean selected = false;
+		CustomPanel.setColumnSpan(shownStaAveBox, 2);
+		this.add(shownStaAveBox, 0, 1);		
+		textArea = controlPanel.getTextArea();
+		textArea.textProperty().addListener(new ChangeListener<String>() {
 
 			@Override
-			public void changedUpdate(DocumentEvent arg0) {
+			public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
 				// TODO Auto-generated method stub
-				
+				if (textArea.getText().length() == 0) {
+					shownStaAveBox.setSelected(false);
+					shownStaAveBox.setDisable(true);
+				}
+				else
+				{
+					shownStaAveBox.setDisable(false);
+				}
 			}
-
-			@Override
-			public void insertUpdate(DocumentEvent arg0) {
-				shownStaAveBox.setSelected(selected);
-				shownStaAveBox.setEnabled(true);
-			}
-
-			@Override
-			public void removeUpdate(DocumentEvent arg0) {
-				// TODO Auto-generated method stub
-				selected = shownStaAveBox.isSelected();
-				shownStaAveBox.setSelected(false);
-				shownStaAveBox.setEnabled(false);
-			}
-			
 		});
 		
-		gbCon.gridx = 0;
-		gbCon.gridy = 2;
-		this.add(asciiAveField, gbCon);
-		gbCon.gridx = 1;
-		this.add(calcAveButton, gbCon);
-		calcAveButton.addActionListener(new ActionListener() {
+		this.add(asciiAveField, 0, 2);
+		this.add(calcAveButton, 1, 2);
+		
+		calcAveButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
+			public void handle(ActionEvent arg0) {
 				// TODO Auto-generated method stub
-				try {
-					calcAveValue(shownStaAveBox.isSelected());
-				} catch (BadLocationException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				calcAveValue(shownStaAveBox.isSelected());
 			}
 			
 		});
 	}
 	
 	private void createComponents() {
-		radioGroup = new ButtonGroup();
-		fourAveButton = new JRadioButton();
+		radioGroup = new ToggleGroup();
+		fourAveButton = new RadioButton();
 		fourAveButton.setText("4-Letter Average");
-		oneAveButton = new JRadioButton();
+		oneAveButton = new RadioButton();
 		oneAveButton.setText("1-Letter Average");
 		
-		radioGroup.add(fourAveButton);
-		radioGroup.add(oneAveButton);
-		radioGroup.setSelected(fourAveButton.getModel(), true);
+		radioGroup.getToggles().add(fourAveButton);
+		radioGroup.getToggles().add(oneAveButton);
+		radioGroup.selectToggle(fourAveButton);
 		
-		shownStaAveBox = new JCheckBox();
+		shownStaAveBox = new CheckBox();
 		shownStaAveBox.setText("Use Shown Stations Only");
-		shownStaAveBox.setEnabled(false);
+		shownStaAveBox.setDisable(true);
 		
-		asciiAveField = new JTextField();
+		asciiAveField = new TextField();
 		asciiAveField.setEditable(false);
 		
-		calcAveButton = new JButton();
+		calcAveButton = new Button();
 		calcAveButton.setText("Calculate Average");
 	}
 	
-	private void calcAveValue(boolean useTextArea) throws BadLocationException {
+	private void calcAveValue(boolean useTextArea) {
 		TreeSet<String> staList = new TreeSet<String>();
 		int[] placeValue = new int[] { 0, 0, 0, 0 };
 		
 		if (useTextArea) {
 			String[] tempArray = textArea.getText(0, textArea.getLength() - 1).split("\n");
-			for (String string : tempArray) {
-				System.out.print(string);
+			for (String string : tempArray) 
 				staList.add(string);
-			}
 		}
 		else {
 			staList = controlPanel.getFullList();

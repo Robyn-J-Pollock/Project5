@@ -3,6 +3,11 @@ import java.io.IOException;
 
 import javax.swing.JFrame;
 
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
+
 /*
  * @author Robyn Pollock
  * @version 12/1/2019
@@ -11,12 +16,8 @@ import javax.swing.JFrame;
  * Creates a gui that allows the user to select a hamming distance.
  * 	Finds the stations that fall within that hamming distance.
  */
-public class DrawFrame extends JFrame {
+public class DrawFrame extends Application {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	
 	protected ControlPanel controlPanel;
 	//TODO: change to custom panel;
@@ -27,7 +28,8 @@ public class DrawFrame extends JFrame {
 	 */
 	public DrawFrame() throws IOException {
 		//sets title
-		super("Hamming Distance");
+		Stage stage = new Stage();
+		stage.setTitle("Hamming Distance");
 		
 		//Create Components
 		controlPanel = new ControlPanel();
@@ -35,24 +37,46 @@ public class DrawFrame extends JFrame {
 		customPanel = new CustomPanel(controlPanel);
 		
 		//sets the layout manager
-		this.setLayout(new GridLayout(1, 2));
+		GridPane pane = new GridPane();
+		Scene scene = new Scene(pane, 800, 800);
 		//TODO: Add components
-		this.add(controlPanel);
-		this.add(customPanel);
+		pane.add(controlPanel, 0, 0);
+		pane.add(customPanel, 1, 0);
 		
 		//setup frame
-		this.setSize(800, 800);
-		this.setResizable(false);
-		this.setLocationRelativeTo(null);
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		this.setVisible(true);
+		stage.setScene(scene);
+		stage.setResizable(false);
+		stage.show();
 	}
 	
 	/*
 	 * Main method
 	 */
-	public static void main(String[] args) throws IOException {
-		DrawFrame frame = new DrawFrame();
-		frame.isActive();
+	public static void main(String[] args) {
+		launch(args);
+	}
+
+	@Override
+	public void start(Stage arg0) throws Exception {
+		// TODO Auto-generated method stub
+		//sets title
+		Stage stage = new Stage();
+		stage.setTitle("Hamming Distance");
+		
+		//Create Components
+		controlPanel = new ControlPanel();
+		//TODO: change to custom panel;
+		customPanel = new CustomPanel(controlPanel);
+		
+		//sets the layout manager
+		GridPane pane = new GridPane();
+		Scene scene = new Scene(pane, 800, 800);
+		//TODO: Add components
+		pane.add(controlPanel, 0, 0);
+		pane.add(customPanel, 1, 0);
+		
+		//setup frame
+		stage.setScene(scene);
+		stage.setResizable(false);
 	}
 }

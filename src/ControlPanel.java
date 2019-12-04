@@ -1,23 +1,23 @@
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.TreeSet;
 
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSlider;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.text.Document;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
+
 /*
  * @author Robyn Pollock
  * @version 12/1/2019
@@ -26,28 +26,23 @@ import javax.swing.text.Document;
  */
 
 
-public class ControlPanel extends JPanel {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public class ControlPanel extends GridPane {
 	
-	protected JSlider hamDistSlider;
+	protected Slider hamDistSlider;
 	
-	protected JButton showStationButton, calcHDButton, addStationButton;
+	protected Button showStationButton, calcHDButton, addStationButton;
 	
-	protected JTextArea showStationArea;
+	protected TextArea showStationArea;
 	
-	protected JComboBox<String> compareWithBox;
+	protected ComboBox<String> compareWithBox;
 	
-	protected JTextField hamDistField, addStationField;
+	protected TextField hamDistField, addStationField;
 	
-	protected JTextField[] textDistFields;
+	protected TextField[] textDistFields;
 	
-	protected JLabel hamDistLabel, compareWithLabel;
+	protected Label hamDistLabel, compareWithLabel;
 	
-	protected JLabel[] textDistLabels;
+	protected Label[] textDistLabels;
 	
 	private TreeSet<String> compareList;
 	
@@ -56,118 +51,89 @@ public class ControlPanel extends JPanel {
 	 */
 	public ControlPanel() throws IOException {	
 		
-		this.setLayout(new GridBagLayout());
-		GridBagConstraints gbConstraints = new GridBagConstraints();
-		
 		//Method to create components
 		createComponents();
-		gbConstraints.fill = GridBagConstraints.BOTH;
-		gbConstraints.weightx = 1;
-		gbConstraints.insets = new Insets(10, 10, 10, 10);
 		
-		gbConstraints.gridx = 0;
-		gbConstraints.gridy = 0;
-		this.add(hamDistLabel, gbConstraints);
+		this.add(hamDistLabel, 0, 0);
 		
+		this.add(hamDistField, 1, 0);
 		
-		gbConstraints.gridx = 1;
-		this.add(hamDistField, gbConstraints);
+		ControlPanel.setColumnSpan(hamDistSlider, 2);
+		this.add(hamDistSlider, 0, 1);
 		
-		gbConstraints.gridx = 0;
-		gbConstraints.gridy = 1;
-		gbConstraints.gridwidth = 2;
-		this.add(hamDistSlider, gbConstraints);
+		this.add(showStationButton, 0, 2);
 		
-		gbConstraints.gridy = 2;
-		this.add(showStationButton, gbConstraints);
+		ControlPanel.setColumnSpan(showStationArea, 2);
+		this.add(showStationArea, 0, 3);
 		
-		gbConstraints.gridy = 3;
-		gbConstraints.weighty = 1;
-		this.add(showStationArea, gbConstraints);
+		this.add(compareWithLabel, 0, 4);
 		
-		gbConstraints.gridwidth = 1;
-		gbConstraints.gridy = 4;
-		gbConstraints.weighty = 0;
-		this.add(compareWithLabel, gbConstraints);
+		this.add(compareWithBox, 1, 4);
 		
-		gbConstraints.gridx = 1;
-		this.add(compareWithBox, gbConstraints);
+		ControlPanel.setColumnSpan(calcHDButton, 2);
+		this.add(calcHDButton, 0, 5);
 		
-		gbConstraints.gridx = 0;
-		gbConstraints.gridy = 5;
-		gbConstraints.gridwidth = 2;
-		this.add(calcHDButton, gbConstraints);
-		
-		gbConstraints.gridwidth = 1;
 		for (int y = 6; y < 11; y++)
 		{
-			gbConstraints.gridy = y;
 			for (int x = 0; x < 2; x++)
 			{
-				gbConstraints.gridx = x;
 				if (x == 0)
-					this.add(textDistLabels[y - 6], gbConstraints);
+					this.add(textDistLabels[y - 6], x, y);
 				else if (x == 1)
-					this.add(textDistFields[y - 6], gbConstraints);
+					this.add(textDistFields[y - 6], x, y);
 			}
 		}
 		
-		gbConstraints.anchor = GridBagConstraints.PAGE_END;
-		gbConstraints.gridx = 0;
-		gbConstraints.gridy = 11;
-		this.add(addStationButton, gbConstraints);
+		this.add(addStationButton, 0, 11);
 		
-		gbConstraints.gridx = 1;
-		this.add(addStationField, gbConstraints);
+		this.add(addStationField, 1, 11);
 		
 		//Adjusts text field on slider change
-		hamDistSlider.addChangeListener(new ChangeListener() 
-				{
+		hamDistSlider.setOnMouseReleased(new EventHandler<MouseEvent>() {
 
-					@Override
-					public void stateChanged(ChangeEvent arg0) {
-						// TODO Auto-generated method stub
-						hamDistField.setText("" + hamDistSlider.getValue());
-					}
-				});
+			@Override
+			public void handle(MouseEvent event) {
+				// TODO Auto-generated method stub
+				hamDistField.setText("" + (int)hamDistSlider.getValue());
+			}
+			
+		});
 		
 		//Runs showStations method on button push
-		showStationButton.addActionListener(new ActionListener() 
-				{
+		showStationButton.setOnAction(new EventHandler<ActionEvent>() {
 
-					@Override
-					public void actionPerformed(ActionEvent arg0) {
-						// TODO Auto-generated method stub
-						showStations(Integer.parseInt(hamDistField.getText()));
-					}
-				});
+			@Override
+			public void handle(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				showStations(Integer.parseInt(hamDistField.getText()));
+			}
+			
+		});
 		
 		//Runs calcHamDist function on button press;
-		calcHDButton.addActionListener(new ActionListener()
-				{
+		calcHDButton.setOnAction(new EventHandler<ActionEvent>() {
 
-					@Override
-					public void actionPerformed(ActionEvent arg0) {
-						// TODO Auto-generated method stub
-						calcHamDist((String)compareWithBox.getSelectedItem());
-					}
-					
-				});
-		
-		addStationButton.addActionListener(new ActionListener()
-				{
-
-					@Override
-					public void actionPerformed(ActionEvent arg0) {
-						// TODO Auto-generated method stub
-						addStation(addStationField.getText().toUpperCase());
-					}
+			@Override
+			public void handle(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				calcHamDist((String)compareWithBox.getValue());
+			}
 			
-				});
+		});
+		
+		addStationButton.setOnAction(new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent arg0) {
+				// TODO Auto-generated method stub
+				addStation(addStationField.getText().toUpperCase());
+			}
+			
+		});
 	}
 	
-	public Document getTextAreaDoc() {
-		return showStationArea.getDocument();
+	public TextArea getTextArea() {
+		return showStationArea;
 	}
 	
 	public TreeSet<String> getFullList() {
@@ -179,44 +145,48 @@ public class ControlPanel extends JPanel {
 	 * Seperated to make editing and readability easier
 	 */
 	private void createComponents() throws IOException {
-		hamDistSlider = new JSlider(1, 4);
-		hamDistSlider.setMajorTickSpacing(1);
-		hamDistSlider.setPaintTicks(true);
-		hamDistSlider.setPaintLabels(true);
+		hamDistSlider = new Slider(1, 4, 2);
+		hamDistSlider.setMajorTickUnit(1);
+		hamDistSlider.setMinorTickCount(0);
+		hamDistSlider.setSnapToTicks(true);
+		hamDistSlider.setShowTickMarks(true);
+		hamDistSlider.setShowTickLabels(true);
 		
-		hamDistLabel = new JLabel("Enter Hamming Dist: ");
-		hamDistLabel.setHorizontalAlignment(JLabel.RIGHT);
+		hamDistLabel = new Label("Enter Hamming Dist: ");
+		hamDistLabel.setAlignment(Pos.CENTER_RIGHT);
 		
-		hamDistField = new JTextField();
+		hamDistField = new TextField();
 		hamDistField.setEditable(false);
-		hamDistField.setText("" + hamDistSlider.getValue());
+		hamDistField.setText("" + (int)hamDistSlider.getValue());
 		
-		showStationButton = new JButton("Show Station");
-		calcHDButton = new JButton("Calculate HD");
-		addStationButton = new JButton("Add Station");
+		showStationButton = new Button("Show Station");
+		calcHDButton = new Button("Calculate HD");
+		addStationButton = new Button("Add Station");
 		
-		showStationArea = new JTextArea();
+		showStationArea = new TextArea();
 		showStationArea.setEditable(false);
 				
-		compareWithBox = new JComboBox<String>();
+		compareWithBox = new ComboBox<String>();
+		compareWithBox.setEditable(false);
 		//Generates base compare with drop down list
 		generateCompareWith();
-		compareWithLabel = new JLabel("Compare with: ");
-		compareWithLabel.setHorizontalAlignment(JLabel.RIGHT);
+		compareWithBox.getSelectionModel().select(0);
+		compareWithLabel = new Label("Compare with: ");
+		compareWithLabel.setAlignment(Pos.CENTER_RIGHT);
 		
-		textDistFields = new JTextField[5];
+		textDistFields = new TextField[5];
 		for (int x = 0; x < 5; x++) {
-			textDistFields[x] = new JTextField();
+			textDistFields[x] = new TextField();
 			textDistFields[x].setEditable(false);
 		}
 		
-		textDistLabels = new JLabel[5];
+		textDistLabels = new Label[5];
 		for (int x = 0; x < 5; x++) {
-			textDistLabels[x] = new JLabel("Distance " + x);
-			textDistLabels[x].setHorizontalAlignment(JLabel.RIGHT);
+			textDistLabels[x] = new Label("Distance " + x);
+			textDistLabels[x].setAlignment(Pos.CENTER_RIGHT);
 		}
 		
-		addStationField = new JTextField();
+		addStationField = new TextField();
 	}
 	
 	/*
@@ -235,9 +205,7 @@ public class ControlPanel extends JPanel {
 			line = br.readLine();
 		}
 		
-		
-		for (String thing : compareList)
-			compareWithBox.addItem(thing);
+		compareWithBox.getItems().addAll(compareList);
 	}
 	
 	/*
@@ -247,7 +215,7 @@ public class ControlPanel extends JPanel {
 		showStationArea.setText("");
 		for (String thing : compareList)
 		{
-			if (hamDistComparer((String)compareWithBox.getSelectedItem(), thing) == hamDist)
+			if (hamDistComparer((String)compareWithBox.getValue(), thing) == hamDist)
 			{
 				showStationArea.setText(showStationArea.getText() + thing + "\n");
 			}
@@ -309,14 +277,18 @@ public class ControlPanel extends JPanel {
 	 * Adds input station to compareList dropdown
 	 */
 	private void addStation(String station) {
+		int selected = compareWithBox.getSelectionModel().getSelectedIndex();
+		String selectString = compareWithBox.getSelectionModel().getSelectedItem();
 		station = station.trim();
 		if (station.length() == 4)
 		{
 			if (compareList.add(station))
 			{
-				compareWithBox.removeAllItems();
-				for (String thing : compareList)
-					compareWithBox.addItem(thing);
+				if(selectString.compareTo(station) > 0);
+					selected++;
+				compareWithBox.getItems().clear();
+				compareWithBox.getItems().addAll(compareList);
+				compareWithBox.getSelectionModel().select(selected);
 			}
 		}
 	}
