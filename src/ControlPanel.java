@@ -203,6 +203,7 @@ public class ControlPanel extends GridPane {
 			line = br.readLine();
 		}
 		
+		br.close();
 		compareWithBox.getItems().addAll(compareList);
 	}
 	
