@@ -19,10 +19,8 @@ import javafx.scene.layout.GridPane;
  * @author Robyn Pollock
  * @version 12/1/2019
  * 
- * Control panel for the frame.
+ * Control panel for the frame. Required Panel for project
  */
-
-
 public class ControlPanel extends GridPane {
 	
 	protected Slider hamDistSlider;
@@ -118,6 +116,9 @@ public class ControlPanel extends GridPane {
 			
 		});
 		
+		/*
+		 * Runs add station method on button press.
+		 */
 		addStationButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -129,17 +130,24 @@ public class ControlPanel extends GridPane {
 		});
 	}
 	
+	/*
+	 * Returns the TextField showStationArea for CustomPanel to do 
+	 * 	calculations
+	 */
 	public TextArea getTextArea() {
 		return showStationArea;
 	}
 	
+	/*
+	 * Returns compareList TreeSet for CustomPanel to do calculations
+	 */
 	public TreeSet<String> getFullList() {
 		return compareList;
 	}
 	
 	/*
 	 * Method used to create components
-	 * Seperated to make editing and readability easier
+	 * Separated to make editing and readability easier
 	 */
 	private void createComponents() throws IOException {
 		hamDistSlider = new Slider(1, 4, 2);

@@ -53,10 +53,15 @@ public class CustomPanel extends GridPane {
 	
 	private float buttonPressed;
 
+	/*
+	 * Creates custom panel and adds components and listeners
+	 */
 	public CustomPanel(ControlPanel controlPanel) {
 		this.controlPanel = controlPanel;
+		//Moved to method for readability
 		createComponents();
 		
+		//Used for progress bar
 		buttonPressed = 0;
 		
 		this.add(fourAveButton, 0, 0);
@@ -65,6 +70,8 @@ public class CustomPanel extends GridPane {
 		CustomPanel.setColumnSpan(shownStaAveBox, 2);
 		this.add(shownStaAveBox, 0, 1);		
 		textArea = controlPanel.getTextArea();
+		//Makes showStaAveBox enabled or disabled depending on if there is 
+		//input in the textArea
 		textArea.textProperty().addListener(new ChangeListener<String>() {
 
 			@Override
@@ -84,6 +91,7 @@ public class CustomPanel extends GridPane {
 		this.add(asciiAveField, 0, 2);
 		this.add(calcAveButton, 1, 2);
 		
+		//Runs calcAveValue on button press
 		calcAveButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -106,6 +114,7 @@ public class CustomPanel extends GridPane {
 		
 		tab1.setContent(tab1Pane);
 		
+		//Adds 5% to the progress bar for each button press
 		pressButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -127,6 +136,9 @@ public class CustomPanel extends GridPane {
 		tab2.setContent(accordion);
 	}
 	
+	/*
+	 * Creates and customizes components for panel
+	 */
 	private void createComponents() {
 		radioGroup = new ToggleGroup();
 		fourAveButton = new RadioButton();
@@ -176,6 +188,12 @@ public class CustomPanel extends GridPane {
 		accordion.getPanes().addAll(pane1, pane2, pane3);		
 	}
 	
+	/*
+	 * useTextArea determines if the text area will be used or the full list
+	 * This method goes through the designated list and determines the average letter
+	 * value of that list, either that of a single letter or 4 letter value dependent on
+	 * the users selection.
+	 */
 	private void calcAveValue(boolean useTextArea) {
 		TreeSet<String> staList = new TreeSet<String>();
 		int[] placeValue = new int[] { 0, 0, 0, 0 };

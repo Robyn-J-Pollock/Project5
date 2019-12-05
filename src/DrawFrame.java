@@ -23,7 +23,10 @@ public class DrawFrame extends Application {
 	public static void main(String[] args) {
 		launch(args);
 	}
-
+	
+	/*
+	 * Generates frame and panels
+	 */
 	@Override
 	public void start(Stage arg0) throws Exception {
 		// TODO Auto-generated method stub
