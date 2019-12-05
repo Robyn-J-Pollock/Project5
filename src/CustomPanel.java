@@ -4,6 +4,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
@@ -13,8 +14,10 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 
 /*
  * Custom panel for Project 5
@@ -41,6 +44,8 @@ public class CustomPanel extends GridPane {
 	protected TabPane tabPane;
 	
 	protected Tab tab1, tab2;
+	
+	protected Accordion accordion;
 	
 	private TextArea textArea;
 	
@@ -89,15 +94,15 @@ public class CustomPanel extends GridPane {
 			
 		});
 		
-		CustomPanel.setColumnSpan(tabPane, 2);
-		this.add(tabPane, 0, 3);
-		
+		CustomPanel.setColumnSpan(tabPane, 3);
+		CustomPanel.setVgrow(tabPane, Priority.ALWAYS);
+		this.add(tabPane, 0, 6);
 		
 		GridPane tab1Pane = new GridPane();
 		
-		tab1Pane.add(buttonBar, 0, 2);
-		tab1Pane.add(loadLabel, 0, 3);
-		tab1Pane.add(pressButton, 0, 1);
+		tab1Pane.add(buttonBar, 0, 1);
+		tab1Pane.add(loadLabel, 0, 2);
+		tab1Pane.add(pressButton, 0, 0);
 		
 		tab1.setContent(tab1Pane);
 		
@@ -107,17 +112,19 @@ public class CustomPanel extends GridPane {
 			public void handle(ActionEvent arg0) {
 				// TODO Auto-generated method stub
 				buttonPressed++;
-				if (buttonPressed > 100) {
+				if (buttonPressed > 20) {
 					buttonPressed = 0;
 					loadLabel.setVisible(false);
 				}
-				buttonBar.setProgress(buttonPressed*0.01);
-				if (buttonPressed == 100) {
+				buttonBar.setProgress(buttonPressed*0.05);
+				if (buttonPressed == 20) {
 					loadLabel.setVisible(true);
 				}
 			}
 			
 		});
+		
+		tab2.setContent(accordion);
 	}
 	
 	private void createComponents() {
@@ -156,6 +163,17 @@ public class CustomPanel extends GridPane {
 		tab2 = new Tab();
 		tab2.setText("Tab 2");
 		tabPane.getTabs().addAll(tab1, tab2);
+		
+		accordion = new Accordion();
+		TitledPane pane1 = new TitledPane("Never Gonna", new Label("Give You Up!"));
+		TitledPane pane2 = new TitledPane("Never Gonna", new Label("Let You Down!"));
+		TitledPane pane3 = new TitledPane();
+		pane3.setText("Never Gonna");
+		GridPane pane3Group = new GridPane();
+		pane3Group.add(new Label("Run Around"), 0, 1);
+		pane3Group.add(new Label("And Desert You!"), 0, 2);
+		pane3.setContent(pane3Group);
+		accordion.getPanes().addAll(pane1, pane2, pane3);		
 	}
 	
 	private void calcAveValue(boolean useTextArea) {

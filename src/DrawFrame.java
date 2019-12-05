@@ -1,8 +1,3 @@
-import java.awt.GridLayout;
-import java.io.IOException;
-
-import javax.swing.JFrame;
-
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
@@ -22,33 +17,6 @@ public class DrawFrame extends Application {
 	protected ControlPanel controlPanel;
 	//TODO: change to custom panel;
 	protected CustomPanel customPanel;
-
-	/*
-	 * Creates frame and panel.
-	 */
-	public DrawFrame() throws IOException {
-		//sets title
-		Stage stage = new Stage();
-		stage.setTitle("Hamming Distance");
-		
-		//Create Components
-		controlPanel = new ControlPanel();
-		//TODO: change to custom panel;
-		customPanel = new CustomPanel(controlPanel);
-		
-		//sets the layout manager
-		GridPane pane = new GridPane();
-		Scene scene = new Scene(pane, 800, 800);
-		//TODO: Add components
-		pane.add(controlPanel, 0, 0);
-		pane.add(customPanel, 1, 0);
-		
-		//setup frame
-		stage.setScene(scene);
-		stage.setResizable(false);
-		stage.show();
-	}
-	
 	/*
 	 * Main method
 	 */
@@ -65,18 +33,17 @@ public class DrawFrame extends Application {
 		
 		//Create Components
 		controlPanel = new ControlPanel();
-		//TODO: change to custom panel;
 		customPanel = new CustomPanel(controlPanel);
 		
 		//sets the layout manager
 		GridPane pane = new GridPane();
-		Scene scene = new Scene(pane, 800, 800);
+		Scene scene = new Scene(pane, 700, 600);
 		//TODO: Add components
 		pane.add(controlPanel, 0, 0);
 		pane.add(customPanel, 1, 0);
 		
-		//setup frame
 		stage.setScene(scene);
-		stage.setResizable(false);
+		stage.sizeToScene();
+		stage.show();
 	}
 }

@@ -3,8 +3,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.TreeSet;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -14,7 +12,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
@@ -165,6 +162,7 @@ public class ControlPanel extends GridPane {
 		
 		showStationArea = new TextArea();
 		showStationArea.setEditable(false);
+		showStationArea.setMaxWidth(350);
 				
 		compareWithBox = new ComboBox<String>();
 		compareWithBox.setEditable(false);
@@ -284,7 +282,7 @@ public class ControlPanel extends GridPane {
 		{
 			if (compareList.add(station))
 			{
-				if(selectString.compareTo(station) > 0);
+				if(selectString.compareTo(station) > 0)
 					selected++;
 				compareWithBox.getItems().clear();
 				compareWithBox.getItems().addAll(compareList);

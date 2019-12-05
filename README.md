@@ -15,3 +15,9 @@ Task 14: Create radio buttons, need 2, 1 for 4 letter average (or station value 
 Task 15: Create toggle button, (allow it to be active if there is value in the JTextArea). When toggled, it only calculates values based on the values in the JTextArea
 Task 16: Create text area to display average values. Add button for user to calculate average
 Task 17: Create function on button press to calculate average ASCII value
+Task 18: Create Tabs
+Task 19: Create progress bar, button;
+Task 20: Add function to button to add to progress bar
+Task 21: Add label when "loading" is complete
+Task 22: Add accordion and labels
+Task 23: Customize to fit properly
